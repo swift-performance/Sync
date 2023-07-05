@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, DateType) {
 
  @return The parsed date.
  */
-+ (NSDate * _Nullable)dateFromISO8601String:(NSString *)iso8601;
++ (NSDate * _Nullable)sync_dateFromISO8601String:(NSString *)iso8601;
 
 @end
 

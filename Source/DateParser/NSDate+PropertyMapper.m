@@ -8,7 +8,7 @@
     DateType dateType = [dateString dateType];
     switch (dateType) {
         case iso8601: {
-            parsedDate = [self dateFromISO8601String:dateString];
+            parsedDate = [self sync_dateFromISO8601String:dateString];
         } break;
         case unixTimestamp: {
             parsedDate = [self dateFromUnixTimestampString:dateString];
@@ -19,7 +19,7 @@
     return parsedDate;
 }
 
-+ (NSDate *)dateFromISO8601String:(NSString *)dateString {
++ (NSDate *)sync_dateFromISO8601String:(NSString *)dateString {
     if (!dateString || [dateString isEqual:[NSNull null]]) {
         return nil;
     }
