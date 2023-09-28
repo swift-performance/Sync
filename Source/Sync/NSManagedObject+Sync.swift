@@ -273,21 +273,24 @@ extension NSManagedObject {
 
                     if deletedItems.count > 0 {
                         safeLocalObjects = try context.fetch(request) as? [NSManagedObject] ?? [NSManagedObject]()
-                        for safeObject in safeLocalObjects! {
-                            let currentID = safeObject.value(forKey: safeObject.entity.sync_localPrimaryKey())!
-                            for deleted in deletedItems {
-                                if (currentID as AnyObject).isEqual(deleted) {
-                                    if relationship.isOrdered {
-                                        let relatedObjects = mutableOrderedSetValue(forKey: relationship.name)
-                                        if relatedObjects.contains(safeObject) {
-                                            relatedObjects.remove(safeObject)
-                                            setValue(relatedObjects, forKey: relationship.name)
-                                        }
-                                    } else {
-                                        let relatedObjects = mutableSetValue(forKey: relationship.name)
-                                        if relatedObjects.contains(safeObject) {
-                                            relatedObjects.remove(safeObject)
-                                            setValue(relatedObjects, forKey: relationship.name)
+                        if let slc = safeLocalObjects {
+                            for safeObject in slc {
+                                if let currentID = safeObject.value(forKey: safeObject.entity.sync_localPrimaryKey()) {
+                                    for deleted in deletedItems {
+                                        if (currentID as AnyObject).isEqual(deleted) {
+                                            if relationship.isOrdered {
+                                                let relatedObjects = mutableOrderedSetValue(forKey: relationship.name)
+                                                if relatedObjects.contains(safeObject) {
+                                                    relatedObjects.remove(safeObject)
+                                                    setValue(relatedObjects, forKey: relationship.name)
+                                                }
+                                            } else {
+                                                let relatedObjects = mutableSetValue(forKey: relationship.name)
+                                                if relatedObjects.contains(safeObject) {
+                                                    relatedObjects.remove(safeObject)
+                                                    setValue(relatedObjects, forKey: relationship.name)
+                                                }
+                                            }
                                         }
                                     }
                                 }
