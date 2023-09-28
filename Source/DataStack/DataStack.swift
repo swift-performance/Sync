@@ -303,7 +303,7 @@ import CoreData
                 self.persistentStoreCoordinator.performAndWait {
                     for store in self.persistentStoreCoordinator.persistentStores {
                         guard let storeURL = store.url else { continue }
-                        try! self.oldDrop(storeURL: storeURL)
+                        try? self.oldDrop(storeURL: storeURL)
                     }
 
                     DispatchQueue.main.async {
