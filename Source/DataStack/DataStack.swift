@@ -390,11 +390,23 @@ import CoreData
         if Thread.isMainThread && TestCheck.isTesting == false {
             throw NSError(info: "Background context saved in the main thread. Use context's `performBlock`", previousError: nil)
         } else {
-            let contextBlock: @convention(block) () -> Void = {
-                self.mainContext.mergeChanges(fromContextDidSave: notification)
+//            let contextBlock: @convention(block) () -> Void = {
+//                self.mainContext.mergeChanges(fromContextDidSave: notification)
+//            }
+//            let blockObject: AnyObject = unsafeBitCast(contextBlock, to: AnyObject.self)
+//            self.mainContext.perform(DataStack.performSelectorForBackgroundContext(), with: blockObject)
+            
+            // @CrashFix: Experimental might cause problem elsewhere.. revert if problematic
+            if TestCheck.isTesting {
+                self.mainContext.performAndWait {
+                    self.mainContext.mergeChanges(fromContextDidSave: notification)
+                }
             }
-            let blockObject: AnyObject = unsafeBitCast(contextBlock, to: AnyObject.self)
-            self.mainContext.perform(DataStack.performSelectorForBackgroundContext(), with: blockObject)
+            else {
+                self.mainContext.perform {
+                    self.mainContext.mergeChanges(fromContextDidSave: notification)
+                }
+            }
         }
     }
 
