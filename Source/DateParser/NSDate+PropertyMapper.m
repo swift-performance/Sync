@@ -238,7 +238,9 @@
             if (hasMicroseconds) {
                 // Converts microseconds to miliseconds to keep consistency with NSDateFormatter
                 // since it doesn't handle microseconds
-                NSString *microsecondsString = [trimmedDate substringToIndex:@"000000".length];
+                // NSString *microsecondsString = [trimmedDate substringToIndex:@"000000".length];
+                // CrashFix: Number of miliseconds is not 6 digit can cause crash
+                NSString *microsecondsString = [trimmedDate substringToIndex:trimmedDate.length - 1];
                 double reducedHundreds = microsecondsString.doubleValue / 1000.0;
                 int hundredsInt = reducedHundreds;
                 double microsecondsWithoutHundreds = reducedHundreds - hundredsInt;
